@@ -11,6 +11,9 @@ int main() {
     Matrix matrix1(values1);
     Matrix matrix2(values2);
 
+    // Пример доступа к элементам матрицы в матричном стиле
+    cout << "Element at (2, 2) in Matrix 1: " << matrix1(2, 2) << endl;
+
     // Вывод первой матрицы
     cout << "Matrix 1:" << endl;
     matrix1.print();
@@ -34,7 +37,19 @@ int main() {
         Matrix transposed = matrix1.transpose();
         cout << "Transpose of Matrix 1:" << endl;
         transposed.print();
+
+        // Нахождение определителя первой матрицы
+        cout << "Determinant of Matrix 1: " << matrix1.determinant() << endl;
+
+        // Нахождение обратной матрицы для первой матрицы
+        Matrix inverse = matrix1.inverse();
+        cout << "Inverse of Matrix 1:" << endl;
+        inverse.print();
     } catch (const invalid_argument& e) {
+        cerr << "Error: " << e.what() << endl;
+    } catch (const out_of_range& e) {
+        cerr << "Error: " << e.what() << endl;
+    } catch (const runtime_error& e) {
         cerr << "Error: " << e.what() << endl;
     }
 
