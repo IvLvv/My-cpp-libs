@@ -27,8 +27,8 @@ public:
     int getCols() const;
 
     // Перегрузка оператора для доступа к элементам матрицы
-    std::vector<int>& operator[](int row);
-    const std::vector<int>& operator[](int row) const;
+    int& operator()(int row, int col);
+    const int& operator()(int row, int col) const;
 
 private:
     int rows;
@@ -43,32 +43,40 @@ Matrix::Matrix(int rows, int cols) : rows(rows), cols(cols), values(rows, std::v
 Matrix::Matrix(const std::vector<std::vector<int>>& values) : rows(values.size()), cols(values[0].size()), values(values) {}
 
 Matrix Matrix::add(const Matrix& other) const {
-    if (rows != other.rows || cols != other.cols) {
-        throw std::invalid_argument("Matrices must have the same dimensions for addition.");
-    }
+    int maxRows = std::max(rows, other.rows);
+    int maxCols = std::max(cols, other.cols);
 
-    Matrix result(rows, cols);
-    for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < cols; ++j) {
-            result[i][j] = values[i][j] + other[i][j];
+    Matrix result(maxRows, maxCols);
+
+    for (int i = 0; i < maxRows; ++i) {
+        for (int j = 0; j < maxCols; ++j) {
+            int val1 = (i < rows && j < cols) ? values[i][j] : 0;
+            int val2 = (i < other.rows && j < other.cols) ? other.values[i][j] : 0;
+            result.values[i][j] = val1 + val2;
         }
     }
+
     return result;
 }
 
 Matrix Matrix::multiply(const Matrix& other) const {
-    if (cols != other.rows) {
-        throw std::invalid_argument("Matrices must have compatible dimensions for multiplication.");
-    }
+    int maxRows = std::max(rows, other.rows);
+    int maxCols = std::max(cols, other.cols);
 
-    Matrix result(rows, other.cols);
-    for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < other.cols; ++j) {
-            for (int k = 0; k < cols; ++k) {
-                result[i][j] += values[i][k] * other[k][j];
+    Matrix result(maxRows, maxCols);
+
+    for (int i = 0; i < maxRows; ++i) {
+        for (int j = 0; j < maxCols; ++j) {
+            int sum = 0;
+            for (int k = 0; k < std::min(cols, other.rows); ++k) {
+                int val1 = (i < rows && k < cols) ? values[i][k] : 0;
+                int val2 = (k < other.rows && j < other.cols) ? other.values[k][j] : 0;
+                sum += val1 * val2;
             }
+            result.values[i][j] = sum;
         }
     }
+
     return result;
 }
 
@@ -76,7 +84,7 @@ Matrix Matrix::transpose() const {
     Matrix result(cols, rows);
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
-            result[j][i] = values[i][j];
+            result.values[j][i] = values[i][j];
         }
     }
     return result;
@@ -99,12 +107,18 @@ int Matrix::getCols() const {
     return cols;
 }
 
-std::vector<int>& Matrix::operator[](int row) {
-    return values[row];
+int& Matrix::operator()(int row, int col) {
+    if (row < 1 || row > rows || col < 1 || col > cols) {
+        throw std::out_of_range("Index out of range");
+    }
+    return values[row - 1][col - 1];
 }
 
-const std::vector<int>& Matrix::operator[](int row) const {
-    return values[row];
+const int& Matrix::operator()(int row, int col) const {
+    if (row < 1 || row > rows || col < 1 || col > cols) {
+        throw std::out_of_range("Index out of range");
+    }
+    return values[row - 1][col - 1];
 }
 
 #endif // MATRIX_H
