@@ -5,8 +5,8 @@ using namespace std;
 
 int main() {
     // Пример использования класса Matrix
-    vector<vector<int>> values1 = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    vector<vector<int>> values2 = {{9, 8, 7}, {6, 5, 4}, {3, 2, 1}};
+    vector<vector<double>> values1 = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    vector<vector<double>> values2 = {{9, 8, 7}, {6, 5, 4}, {3, 2, 1}};
 
     Matrix matrix1(values1);
     Matrix matrix2(values2);
