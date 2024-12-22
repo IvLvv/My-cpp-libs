@@ -4,54 +4,33 @@
 using namespace std;
 
 int main() {
-    // Пример использования класса Matrix
-    vector<vector<double>> values1 = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    vector<vector<double>> values2 = {{9, 8, 7}, {6, 5, 4}, {3, 2, 1}};
+    // Create two matrices
+    Matrix mat1({{1, 2}, {3, 4}});
+    Matrix mat2({{5, 6}, {7, 8}});
 
-    Matrix matrix1(values1);
-    Matrix matrix2(values2);
+    // Add matrices
+    Matrix result = mat1.add(mat2);
+    std::cout << "Sum of matrices:" << std::endl;
+    result.print();
 
-    // Пример доступа к элементам матрицы в матричном стиле
-    cout << "Element at (2, 2) in Matrix 1: " << matrix1(2, 2) << endl;
+    // Multiply matrices
+    result = mat1.multiply(mat2);
+    std::cout << "Product of matrices:" << std::endl;
+    result.print();
 
-    // Вывод первой матрицы
-    cout << "Matrix 1:" << endl;
-    matrix1.print();
+    // Transpose matrix
+    result = mat1.transpose();
+    std::cout << "Transpose of matrix 1:" << std::endl;
+    result.print();
 
-    // Вывод второй матрицы
-    cout << "Matrix 2:" << endl;
-    matrix2.print();
+    // Calculate determinant
+    int det = mat1.determinant();
+    std::cout << "Determinant of matrix 1: " << det << std::endl;
 
-    try {
-        // Сложение матриц
-        Matrix sum = matrix1.add(matrix2);
-        cout << "Sum of Matrix 1 and Matrix 2:" << endl;
-        sum.print();
-
-        // Умножение матриц
-        Matrix product = matrix1.multiply(matrix2);
-        cout << "Product of Matrix 1 and Matrix 2:" << endl;
-        product.print();
-
-        // Транспонирование первой матрицы
-        Matrix transposed = matrix1.transpose();
-        cout << "Transpose of Matrix 1:" << endl;
-        transposed.print();
-
-        // Нахождение определителя первой матрицы
-        cout << "Determinant of Matrix 1: " << matrix1.determinant() << endl;
-
-        // Нахождение обратной матрицы для первой матрицы
-        Matrix inverse = matrix1.inverse();
-        cout << "Inverse of Matrix 1:" << endl;
-        inverse.print();
-    } catch (const invalid_argument& e) {
-        cerr << "Error: " << e.what() << endl;
-    } catch (const out_of_range& e) {
-        cerr << "Error: " << e.what() << endl;
-    } catch (const runtime_error& e) {
-        cerr << "Error: " << e.what() << endl;
-    }
+    // Find inverse
+    result = mat1.inverse();
+    std::cout << "Inverse of matrix 1:" << std::endl;
+    result.print();
 
     return 0;
 }
